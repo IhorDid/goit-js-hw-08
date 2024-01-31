@@ -104,7 +104,6 @@ function handleImageClick(event) {
           }
         };
         document.addEventListener('keydown', handleEscapePress);
-        instance.element().focus();
       },
       onClose: instance => {
         const handleEscapePress = event => {
