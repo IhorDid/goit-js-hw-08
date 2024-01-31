@@ -83,25 +83,39 @@ const galleryImages = images
   .join('');
 galleryList.innerHTML = galleryImages;
 
-galleryList.addEventListener('click', handleButtonClick);
+galleryList.addEventListener('click', handleImageClick);
 
-function handleButtonClick(event) {
+function handleImageClick(event) {
   event.preventDefault();
   if (event.target.nodeName !== 'IMG') {
     return;
   }
-  const handledButtonClick = event.target.dataset.source;
-  const instance = basicLightbox.create(`
-    <img src="${handledButtonClick}" width="1112" height="640">
-`);
+  const handledImageClick = event.target.dataset.source;
+
+  const instance = basicLightbox.create(
+    `
+    <img src="${handledImageClick}" width="1112" height="640">
+`,
+    {
+      onShow: instance => {
+        const handleEscapePress = event => {
+          if (event.code === 'Escape') {
+            instance.close();
+          }
+        };
+        document.addEventListener('keydown', handleEscapePress);
+        instance.element().focus();
+      },
+      onClose: instance => {
+        const handleEscapePress = event => {
+          if (event.code === 'Escape') {
+            instance.close();
+          }
+        };
+        document.removeEventListener('keydown', handleEscapePress);
+      },
+    }
+  );
 
   instance.show();
-
-  document.addEventListener('keydown', handleEscapePress);
-  function handleEscapePress(event) {
-    if (event.code === 'Escape') {
-      instance.close();
-      document.removeEventListener('keydown', handleEscapePress);
-    }
-  }
 }
